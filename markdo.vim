@@ -5,6 +5,7 @@ nnoremap <silent> <Leader>x :call MarkDoToggleMark()<CR>
 nnoremap <silent> <Leader>n :call MarkDoToggleMark("N")<CR>
 nnoremap <silent> <Leader>b :call MarkDoToggleMark("B")<CR>
 nnoremap <silent> <Leader>- :call MarkDoToggleMark("-")<CR>
+nnoremap <silent> <Leader><Return> :call MarkDoNewWeek()<CR>
 
 function! MarkDoFolds()
   let l:cur_line = getline(v:lnum)
@@ -62,6 +63,26 @@ function! MarkDoNewEntry()
   endif
   call setline(l:line_no, "- [ ] ")
   startinsert!
+endfunction
+
+function! MarkDoNewWeek()
+  let l:end = line("$")
+  let l:week_start = trim(system("date --date='last monday' +%Y-%m-%d"))
+  let l:week_end = trim(system("date --date='next friday' +%Y-%m-%d"))
+
+  if getline(l:end) != ""
+    call append(l:end, "")
+  endif
+
+  call append(line("$"), [
+    \"## " . l:week_start . " - " . l:week_end,
+    \"**Monday**", "",
+    \"**Tuesday**", "",
+    \"**Wednesday**", "",
+    \"**Thursday**", "",
+    \"**Friday**", ""
+  \])
+  call cursor(line("$"), 0)
 endfunction
 
 set foldmethod=expr
