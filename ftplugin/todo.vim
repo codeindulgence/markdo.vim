@@ -1,5 +1,3 @@
-echo "loadmarkdo"
-
 function! MarkdoFold()
   let l:cur_line = getline(v:lnum)
   let l:next_line = getline(v:lnum+1)
@@ -69,13 +67,20 @@ function! s:week()
 
   call append(line("$"), [
     \"## " . l:week_start . " - " . l:week_end,
-    \"**Monday**", "",
+    \"**Monday**", ""
+  \])
+
+  let l:monday = line("$") - 1
+
+  call append(line("$"), [
     \"**Tuesday**", "",
     \"**Wednesday**", "",
     \"**Thursday**", "",
     \"**Friday**", ""
   \])
-  call cursor(line("$"), 0)
+
+  echo "monday at " . l:monday
+  call cursor(l:monday, 0)
 endfunction
 
 function! s:i_return()
