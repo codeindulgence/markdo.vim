@@ -36,14 +36,14 @@ function! MarkDoFolds()
   let l:next_line = getline(v:lnum+1)
 
   if l:cur_line =~ '^## '
-    return 1
+    return ">1"
   else
     if l:next_line =~ "^## "
       return "<1"
     endif
   endif
 
-  return "="
+  return -1
 endfunction
 
 function! MarkDoFoldText()
