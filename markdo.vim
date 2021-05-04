@@ -6,15 +6,25 @@ nnoremap <silent> <Leader>n :call MarkDoToggleMark("N")<CR>
 nnoremap <silent> <Leader>b :call MarkDoToggleMark("B")<CR>
 nnoremap <silent> <Leader>- :call MarkDoToggleMark("-")<CR>
 
-function! MarkDoNewEntry()
-  let l:line_no = line(".")
-  call append(l:line_no, "")
-  if getline(l:line_no) != ""
-    call cursor(l:line_no + 1, 0)
-    let l:line_no = line(".")
+function! MarkDoFolds()
+  let l:cur_line = getline(v:lnum)
+  let l:next_line = getline(v:lnum+1)
+
+  if l:cur_line =~ '^## '
+    return ">1"
+  else
+    if l:next_line =~ "^## "
+      return "<1"
+    endif
   endif
-  call setline(l:line_no, "- [ ] ")
-  startinsert!
+
+  return -1
+endfunction
+
+function! MarkDoFoldText()
+  let line = getline(v:foldstart)
+  let line_text = substitute(line, '^## ', '', 'g')
+  return line_text
 endfunction
 
 function! MarkDoToggleMark(...)
@@ -43,25 +53,15 @@ function! MarkDoToggleMark(...)
   endif
 endfunction
 
-function! MarkDoFolds()
-  let l:cur_line = getline(v:lnum)
-  let l:next_line = getline(v:lnum+1)
-
-  if l:cur_line =~ '^## '
-    return ">1"
-  else
-    if l:next_line =~ "^## "
-      return "<1"
-    endif
+function! MarkDoNewEntry()
+  let l:line_no = line(".")
+  call append(l:line_no, "")
+  if getline(l:line_no) != ""
+    call cursor(l:line_no + 1, 0)
+    let l:line_no = line(".")
   endif
-
-  return -1
-endfunction
-
-function! MarkDoFoldText()
-  let line = getline(v:foldstart)
-  let line_text = substitute(line, '^## ', '', 'g')
-  return line_text
+  call setline(l:line_no, "- [ ] ")
+  startinsert!
 endfunction
 
 set foldmethod=expr
