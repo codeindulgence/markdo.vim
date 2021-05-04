@@ -1,9 +1,21 @@
 nnoremap <Leader>[ a -     <Esc>hhhR[ ]<Esc>A
 nnoremap <Leader>] o<Backspace> -     <Esc>hhhR[ ]<Esc>A
-nnoremap <silent> <Return><Return> :call MarkDoToggleMark()<CR>
-nnoremap <silent> <Return>n :call MarkDoToggleMark("N")<CR>
-nnoremap <silent> <Return>b :call MarkDoToggleMark("B")<CR>
-nnoremap <silent> <Return>- :call MarkDoToggleMark("-")<CR>
+nnoremap <silent> <Return> :call MarkDoNewEntry()<CR>
+nnoremap <silent> <Leader>x :call MarkDoToggleMark()<CR>
+nnoremap <silent> <Leader>n :call MarkDoToggleMark("N")<CR>
+nnoremap <silent> <Leader>b :call MarkDoToggleMark("B")<CR>
+nnoremap <silent> <Leader>- :call MarkDoToggleMark("-")<CR>
+
+function! MarkDoNewEntry()
+  let l:line_no = line(".")
+  call append(l:line_no, "")
+  if getline(l:line_no) != ""
+    call cursor(l:line_no + 1, 0)
+    let l:line_no = line(".")
+  endif
+  call setline(l:line_no, "- [ ] ")
+  startinsert!
+endfunction
 
 function! MarkDoToggleMark(...)
   let l:line_no = line(".")
