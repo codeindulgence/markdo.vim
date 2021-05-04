@@ -1,11 +1,10 @@
-nnoremap <Leader>[ a -     <Esc>hhhR[ ]<Esc>A
-nnoremap <Leader>] o<Backspace> -     <Esc>hhhR[ ]<Esc>A
-nnoremap <silent> <Return> :call markdo#new()<CR>
-nnoremap <silent> <Leader>x :call markdo#toggle()<CR>
-nnoremap <silent> <Leader>n :call markdo#toggle("N")<CR>
-nnoremap <silent> <Leader>b :call markdo#toggle("B")<CR>
-nnoremap <silent> <Leader>- :call markdo#toggle("-")<CR>
-nnoremap <silent> <Leader><Return> :call markdo#week()<CR>
+nnoremap <buffer> <silent> <CR> :call markdo#new()<CR>
+nnoremap <buffer> <silent> <Leader><Space> :call markdo#toggle()<CR>
+nnoremap <buffer> <silent> <Leader>x :call markdo#toggle()<CR>
+nnoremap <buffer> <silent> <Leader>n :call markdo#toggle("N")<CR>
+nnoremap <buffer> <silent> <Leader>b :call markdo#toggle("B")<CR>
+nnoremap <buffer> <silent> <Leader>- :call markdo#toggle("-")<CR>
+nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
 
 function! markdo#fold()
   let l:cur_line = getline(v:lnum)
@@ -85,6 +84,6 @@ function! markdo#week()
   call cursor(line("$"), 0)
 endfunction
 
-set foldmethod=expr
-set foldexpr=markdo#fold()
-set foldtext=markdo#foldtext()
+setlocal foldmethod=expr
+setlocal foldexpr=markdo#fold()
+setlocal foldtext=markdo#foldtext()
