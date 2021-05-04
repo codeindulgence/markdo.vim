@@ -1,13 +1,13 @@
 nnoremap <Leader>[ a -     <Esc>hhhR[ ]<Esc>A
 nnoremap <Leader>] o<Backspace> -     <Esc>hhhR[ ]<Esc>A
-nnoremap <silent> <Return> :call MarkDoNewEntry()<CR>
-nnoremap <silent> <Leader>x :call MarkDoToggleMark()<CR>
-nnoremap <silent> <Leader>n :call MarkDoToggleMark("N")<CR>
-nnoremap <silent> <Leader>b :call MarkDoToggleMark("B")<CR>
-nnoremap <silent> <Leader>- :call MarkDoToggleMark("-")<CR>
-nnoremap <silent> <Leader><Return> :call MarkDoNewWeek()<CR>
+nnoremap <silent> <Return> :call markdo#new()<CR>
+nnoremap <silent> <Leader>x :call markdo#toggle()<CR>
+nnoremap <silent> <Leader>n :call markdo#toggle("N")<CR>
+nnoremap <silent> <Leader>b :call markdo#toggle("B")<CR>
+nnoremap <silent> <Leader>- :call markdo#toggle("-")<CR>
+nnoremap <silent> <Leader><Return> :call markdo#week()<CR>
 
-function! MarkDoFolds()
+function! markdo#fold()
   let l:cur_line = getline(v:lnum)
   let l:next_line = getline(v:lnum+1)
 
@@ -22,13 +22,13 @@ function! MarkDoFolds()
   return -1
 endfunction
 
-function! MarkDoFoldText()
+function! markdo#foldtext()
   let line = getline(v:foldstart)
   let line_text = substitute(line, '^## ', '', 'g')
   return line_text
 endfunction
 
-function! MarkDoToggleMark(...)
+function! markdo#toggle(...)
   let l:line_no = line(".")
   let l:cur_line = getline(line("."))
 
@@ -54,7 +54,7 @@ function! MarkDoToggleMark(...)
   endif
 endfunction
 
-function! MarkDoNewEntry()
+function! markdo#new()
   let l:line_no = line(".")
   call append(l:line_no, "")
   if getline(l:line_no) != ""
@@ -65,7 +65,7 @@ function! MarkDoNewEntry()
   startinsert!
 endfunction
 
-function! MarkDoNewWeek()
+function! markdo#week()
   let l:end = line("$")
   let l:week_start = trim(system("date --date='last monday' +%Y-%m-%d"))
   let l:week_end = trim(system("date --date='next friday' +%Y-%m-%d"))
@@ -86,5 +86,5 @@ function! MarkDoNewWeek()
 endfunction
 
 set foldmethod=expr
-set foldexpr=MarkDoFolds()
-set foldtext=MarkDoFoldText()
+set foldexpr=markdo#fold()
+set foldtext=markdo#foldtext()
