@@ -1,13 +1,6 @@
-nnoremap <buffer> <silent> <CR> :call markdo#new()<CR>
-nnoremap <buffer> <silent> <Leader><Space> :call markdo#toggle()<CR>
-nnoremap <buffer> <silent> <Leader>x :call markdo#toggle()<CR>
-nnoremap <buffer> <silent> <Leader>n :call markdo#toggle("N")<CR>
-nnoremap <buffer> <silent> <Leader>b :call markdo#toggle("B")<CR>
-nnoremap <buffer> <silent> <Leader>- :call markdo#toggle("-")<CR>
-nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
-inoremap <buffer> <expr> <cr> markdo#i_return()
+echo "loadmarkdo"
 
-function! markdo#fold()
+function! MarkdoFold()
   let l:cur_line = getline(v:lnum)
   let l:next_line = getline(v:lnum+1)
 
@@ -22,13 +15,13 @@ function! markdo#fold()
   return -1
 endfunction
 
-function! markdo#foldtext()
+function! MarkFoldText()
   let line = getline(v:foldstart)
   let line_text = substitute(line, '^## ', '', 'g')
   return line_text
 endfunction
 
-function! markdo#toggle(...)
+function! s:toggle(...)
   let l:line_no = line(".")
   let l:cur_line = getline(line("."))
 
@@ -54,7 +47,7 @@ function! markdo#toggle(...)
   endif
 endfunction
 
-function! markdo#new()
+function! s:new()
   let l:line_no = line(".")
   call append(l:line_no, "")
   if getline(l:line_no) != ""
@@ -65,7 +58,7 @@ function! markdo#new()
   startinsert!
 endfunction
 
-function! markdo#week()
+function! s:week()
   let l:end = line("$")
   let l:week_start = trim(system("date --date='last monday' +%Y-%m-%d"))
   let l:week_end = trim(system("date --date='next friday' +%Y-%m-%d"))
@@ -85,10 +78,19 @@ function! markdo#week()
   call cursor(line("$"), 0)
 endfunction
 
-function! markdo#i_return()
+function! s:i_return()
   return "\n- [ ] "
 endfunction
 
 setlocal foldmethod=expr
-setlocal foldexpr=markdo#fold()
-setlocal foldtext=markdo#foldtext()
+setlocal foldexpr=MarkdoFold()
+setlocal foldtext=MarkFoldText()
+
+nnoremap <buffer> <silent> o :call <SID>new()<CR>
+nnoremap <buffer> <silent> <CR> :call <SID>toggle()<CR>
+nnoremap <buffer> <silent> <Leader>x :call <SID>toggle()<CR>
+nnoremap <buffer> <silent> <Leader>n :call <SID>toggle("N")<CR>
+nnoremap <buffer> <silent> <Leader>b :call <SID>toggle("B")<CR>
+nnoremap <buffer> <silent> <Leader>- :call <SID>toggle("-")<CR>
+nnoremap <buffer> <silent> <Leader><CR> :call <SID>week()<CR>
+inoremap <buffer> <expr> <cr> <SID>i_return()
