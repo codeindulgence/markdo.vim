@@ -31,9 +31,9 @@ function! MarkDoToggleMark(...)
   endif
 endfunction
 
-function! MarkDoFolds(lnum)
-  let l:cur_line = getline(a:lnum)
-  let l:next_line = getline(a:lnum+1)
+function! MarkDoFolds()
+  let l:cur_line = getline(v:lnum)
+  let l:next_line = getline(v:lnum+1)
 
   if l:cur_line =~ '^## '
     return 1
@@ -53,5 +53,5 @@ function! MarkDoFoldText()
 endfunction
 
 set foldmethod=expr
-set foldexpr=MarkDoFolds(v:lnum)
+set foldexpr=MarkDoFolds()
 set foldtext=MarkDoFoldText()
