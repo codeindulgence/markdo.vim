@@ -5,6 +5,7 @@ nnoremap <buffer> <silent> <Leader>n :call markdo#toggle("N")<CR>
 nnoremap <buffer> <silent> <Leader>b :call markdo#toggle("B")<CR>
 nnoremap <buffer> <silent> <Leader>- :call markdo#toggle("-")<CR>
 nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
+inoremap <buffer> <expr> <cr> markdo#i_return()
 
 function! markdo#fold()
   let l:cur_line = getline(v:lnum)
@@ -82,6 +83,10 @@ function! markdo#week()
     \"**Friday**", ""
   \])
   call cursor(line("$"), 0)
+endfunction
+
+function! markdo#i_return()
+  return "\n- [ ] "
 endfunction
 
 setlocal foldmethod=expr
