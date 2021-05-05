@@ -102,19 +102,19 @@ setlocal foldtext=MarkFoldText()
 setlocal comments=:\|
 setlocal formatoptions=jtcqlnroaw
 
-syntax match markdoReference /@[a-z]\+/
-syntax match markdoTime /\d\d:\d\d-\d\d:\d\d/
-syntax region markdoDone start=/- \[x\]/ end=/$/
-syntax region markdoNew start=/- \[N\]/ end=/$/ contains=markdoReference,markdoTime
-syntax region markdoBlocked start=/- \[B\]/ end=/$/ contains=markdoReference,markdoTime
-syntax region markdoExtra start=/^    |/ end=/$/ contains=markdoReference,markdoTime
+syntax match todoRef /@[a-z]\+/
+syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
+syntax region todoDone start=/- \[x\]/ end=/$/
+syntax region todoNew start=/- \[N\]/ end=/$/ contains=todoRef,todoTime
+syntax region todoBlocked start=/- \[B\]/ end=/$/ contains=todoRef,todoTime
+syntax region todoExtra start=/^    |/ end=/$/ contains=todoRef,todoTime
 
-highlight default link markdoReference Keyword
-highlight default link markdoTime Number
-highlight default link markdoDone Comment
-highlight default link markdoNew String
-highlight default link markdoBlocked Exception
-highlight default link markdoExtra Special
+highlight default link todoRef Keyword
+highlight default link todoTime Number
+highlight default link todoDone Comment
+highlight default link todoNew String
+highlight default link todoBlocked Exception
+highlight default link todoExtra Special
 
 nnoremap <buffer> <silent> o :call <SID>new()<CR>
 nnoremap <buffer> <silent> <CR> :call <SID>toggle()<CR>
