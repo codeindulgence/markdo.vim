@@ -81,7 +81,7 @@ function! markdo#week(...)
   call append(line("$"), repeat('-', 80))
 
   call cursor(l:monday, 0)
-  normal zt
+  normal zz
 endfunction
 
 function! s:i_return()
