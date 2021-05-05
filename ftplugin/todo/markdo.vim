@@ -1,4 +1,4 @@
-function! MarkdoFold()
+function! markdo#fold()
   let l:cur_line = getline(v:lnum)
 
   if l:cur_line =~ '^## '
@@ -12,7 +12,7 @@ function! MarkdoFold()
   return -1
 endfunction
 
-function! MarkFoldText()
+function! markdo#foldtext()
   let line = getline(v:foldstart)
   let line_text = substitute(line, '^## ', '', 'g')
   return line_text
@@ -56,10 +56,20 @@ function! s:new()
   startinsert!
 endfunction
 
-function! s:week()
+function! markdo#week(...)
+  if a:0 > 0
+    let l:offset = str2nr(a:1)-1
+  else
+    let l:offset = -1 " Get's last Monday
+  endif
+
+  let l:fmt = "+%Y-%m-%d"
+  let l:start_cmd = "date --date='monday ".l:offset." week' " . l:fmt
+  let l:end_cmd = "date --date='friday ".(l:offset+1)." week' " . l:fmt
+
   let l:end = line("$")
-  let l:week_start = trim(system("date --date='last monday' +%Y-%m-%d"))
-  let l:week_end = trim(system("date --date='next friday' +%Y-%m-%d"))
+  let l:week_start = trim(system(l:start_cmd))
+  let l:week_end = trim(system(l:end_cmd))
   let l:days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
   call append(line("$"), "## " . l:week_start . " - " . l:week_end)
@@ -88,8 +98,8 @@ function! s:i_return()
 endfunction
 
 setlocal foldmethod=expr
-setlocal foldexpr=MarkdoFold()
-setlocal foldtext=MarkFoldText()
+setlocal foldexpr=markdo#fold()
+setlocal foldtext=markdo#foldtext()
 
 setlocal comments=:\|
 setlocal formatoptions=jtcqlnroaw
@@ -116,5 +126,5 @@ nnoremap <buffer> <silent> - :call <SID>toggle("-")<CR>
 nnoremap <buffer> <silent> <Leader>x :call <SID>toggle()<CR>
 nnoremap <buffer> <silent> <Leader>n :call <SID>toggle("N")<CR>
 nnoremap <buffer> <silent> <Leader>b :call <SID>toggle("B")<CR>
-nnoremap <buffer> <silent> <Leader><CR> :call <SID>week()<CR>
+nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
 inoremap <buffer> <expr> <cr> <SID>i_return()
