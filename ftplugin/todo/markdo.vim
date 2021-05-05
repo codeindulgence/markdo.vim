@@ -15,7 +15,7 @@ endfunction
 function! markdo#foldtext()
   let line = getline(v:foldstart)
   let line_text = substitute(line, '^## ', '', 'g')
-  return line_text
+  return '> ' . line_text
 endfunction
 
 function! s:toggle(...)
@@ -95,7 +95,7 @@ function! markdo#week(...)
       call append(l:weektop, "## " . l:startdate . " ▸ " . l:date)
     endif
 
-    call append(line("$"), "### " . day . ", " . l:date[:1] )
+    call append(line("$"), ["**" . day . ", " . l:date[:1] . "**", ""])
   endfor
   call append(line("$"), repeat('-', 80))
 
@@ -107,7 +107,7 @@ function! s:i_return()
   let l:line = getline(".")
 
   if l:line[-1:] == ':'
-    return "\n    | "
+    return "\n    > "
   elseif l:line[:2] == '- ['
     return "\n- [ ] "
   else
@@ -119,8 +119,11 @@ setlocal foldmethod=expr
 setlocal foldexpr=markdo#fold()
 setlocal foldtext=markdo#foldtext()
 
-setlocal comments=:\|
+setlocal comments=:>
 setlocal formatoptions=jtcqlnroaw
+setlocal nonumber
+setlocal norelativenumber
+setlocal signcolumn=no
 
 syntax match todoRef /@[a-z]\+/
 syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
@@ -128,7 +131,7 @@ syntax region todoStarted start=/- \[-\]/ end=/$/
 syntax region todoDone start=/- \[x\]/ end=/$/ contains=todoRef,todoTime
 syntax region todoNew start=/- \[N\]/ end=/$/ contains=todoRef,todoTime
 syntax region todoBlocked start=/- \[B\]/ end=/$/ contains=todoRef,todoTime
-syntax region todoExtra start=/^    |/ end=/$/ contains=todoRef,todoTime
+syntax region todoExtra start=/^    >/ end=/$/ contains=todoRef,todoTime
 
 highlight default link todoRef Keyword
 highlight default link todoTime Number
