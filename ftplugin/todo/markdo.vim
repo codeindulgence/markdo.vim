@@ -84,24 +84,37 @@ function! s:week()
 endfunction
 
 function! s:i_return()
-  return "\n- [ ] "
+  let l:line = getline(".")
+
+  if l:line[-1:] == ':'
+    return "\n    | "
+  elseif l:line[:2] == '- ['
+    return "\n- [ ] "
+  else
+    return "\n"
+  endif
 endfunction
 
 setlocal foldmethod=expr
 setlocal foldexpr=MarkdoFold()
 setlocal foldtext=MarkFoldText()
 
+setlocal comments=:\|
+setlocal formatoptions=jtcqlnroaw
+
 syntax match markdoReference /@[a-z]\+/
 syntax match markdoTime /\d\d:\d\d-\d\d:\d\d/
 syntax region markdoDone start=/- \[x\]/ end=/$/
 syntax region markdoNew start=/- \[N\]/ end=/$/ contains=markdoReference,markdoTime
 syntax region markdoBlocked start=/- \[B\]/ end=/$/ contains=markdoReference,markdoTime
+syntax region markdoExtra start=/^    |/ end=/$/ contains=markdoReference,markdoTime
 
 highlight default link markdoReference Keyword
 highlight default link markdoTime Number
 highlight default link markdoDone Comment
 highlight default link markdoNew String
 highlight default link markdoBlocked Exception
+highlight default link markdoExtra Special
 
 nnoremap <buffer> <silent> o :call <SID>new()<CR>
 nnoremap <buffer> <silent> <CR> :call <SID>toggle()<CR>
