@@ -1,13 +1,12 @@
 function! MarkdoFold()
   let l:cur_line = getline(v:lnum)
-  let l:next_line = getline(v:lnum+1)
 
   if l:cur_line =~ '^## '
     return ">1"
-  else
-    if l:next_line =~ "^## "
-      return "<1"
-    endif
+  endif
+
+  if l:cur_line =~ '^-\+$'
+    return "<1"
   endif
 
   return -1
@@ -63,13 +62,9 @@ function! s:week()
   let l:week_end = trim(system("date --date='next friday' +%Y-%m-%d"))
   let l:days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
-  if getline(l:end) != ""
-    call append(l:end, "")
-  endif
-
   call append(line("$"), "## " . l:week_start . " - " . l:week_end)
   for day in l:days
-    call append(line("$"), ["### " . day, ""])
+    call append(line("$"), "### " . day)
     if day == 'Monday'
       let l:monday = line("$") - 1
     endif
