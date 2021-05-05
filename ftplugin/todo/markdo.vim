@@ -61,26 +61,21 @@ function! s:week()
   let l:end = line("$")
   let l:week_start = trim(system("date --date='last monday' +%Y-%m-%d"))
   let l:week_end = trim(system("date --date='next friday' +%Y-%m-%d"))
+  let l:days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
 
   if getline(l:end) != ""
     call append(l:end, "")
   endif
 
-  call append(line("$"), [
-    \"## " . l:week_start . " - " . l:week_end,
-    \"### Monday", ""
-  \])
+  call append(line("$"), "## " . l:week_start . " - " . l:week_end)
+  for day in l:days
+    call append(line("$"), ["### " . day, ""])
+    if day == 'Monday'
+      let l:monday = line("$") - 1
+    endif
+  endfor
+  call append(line("$"), repeat('-', 80))
 
-  let l:monday = line("$") - 1
-
-  call append(line("$"), [
-    \"### Tuesday", "",
-    \"### Wednesday", "",
-    \"### Thursday", "",
-    \"### Friday", ""
-  \])
-
-  echo "monday at " . l:monday
   call cursor(l:monday, 0)
 endfunction
 
