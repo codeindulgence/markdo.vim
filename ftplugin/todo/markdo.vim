@@ -77,6 +77,7 @@ function! s:week()
   call append(line("$"), repeat('-', 80))
 
   call cursor(l:monday, 0)
+  normal zt
 endfunction
 
 function! s:i_return()
