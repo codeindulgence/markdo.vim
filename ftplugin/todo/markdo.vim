@@ -56,31 +56,50 @@ function! s:new()
 endfunction
 
 function! markdo#week(...)
+  let l:dowcmd = "date +%u" " Day Of Week
+  let l:dow = str2nr(trim(system(l:dowcmd)))
+
   if a:0 > 0
     let l:offset = str2nr(a:1)-1
-  else
-    let l:offset = -1 " Get's last Monday
+  else " Get current week
+    if l:dow == 1
+      let l:offset = 0
+    else
+      let l:offset = -1
+    endif
   endif
 
-  let l:fmt = "+%Y-%m-%d"
-  let l:start_cmd = "date --date='monday ".l:offset." week' " . l:fmt
-  let l:end_cmd = "date --date='friday ".(l:offset+1)." week' " . l:fmt
-
+  let l:fmt = "+%d %b %Y"
   let l:end = line("$")
-  let l:week_start = trim(system(l:start_cmd))
-  let l:week_end = trim(system(l:end_cmd))
-  let l:days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+  let l:days = [
+    \[1, 'Mon'],
+    \[2, 'Tue'],
+    \[3, 'Wed'],
+    \[4, 'Thu'],
+    \[5, 'Fri']
+  \]
 
-  call append(line("$"), "## " . l:week_start . " - " . l:week_end)
-  for day in l:days
-    call append(line("$"), "### " . day)
-    if day == 'Monday'
-      let l:monday = line("$") - 1
+  for [i, day] in l:days
+    if i == l:dow
+      let l:offset += 1
     endif
+    let l:datecmd = "date --date='".day." ".l:offset." week' '" . l:fmt . "'"
+    let l:date = trim(system(l:datecmd))
+
+    if day == 'Mon'
+      let l:startdate = l:date
+      let l:weektop = line("$")
+    endif
+
+    if day == 'Fri'
+      call append(l:weektop, "## " . l:startdate . " ▸ " . l:date)
+    endif
+
+    call append(line("$"), "### " . day . ", " . l:date[:1] )
   endfor
   call append(line("$"), repeat('-', 80))
 
-  call cursor(l:monday, 0)
+  call cursor(l:weektop+1, 0)
   normal zz
 endfunction
 
