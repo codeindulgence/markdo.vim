@@ -41,7 +41,6 @@ function! s:toggle(...)
 
     let l:new_line = "- [" . l:mark . "] " . l:text
     call setline(l:line_no, l:new_line)
-    call cursor(l:line_no + 1, 7)
   endif
 endfunction
 
