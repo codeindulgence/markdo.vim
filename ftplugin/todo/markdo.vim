@@ -91,6 +91,18 @@ setlocal foldmethod=expr
 setlocal foldexpr=MarkdoFold()
 setlocal foldtext=MarkFoldText()
 
+syntax match markdoReference /@[a-z]\+/
+syntax match markdoTime /\d\d:\d\d-\d\d:\d\d/
+syntax region markdoDone start=/- \[x\]/ end=/$/
+syntax region markdoNew start=/- \[N\]/ end=/$/ contains=markdoReference,markdoTime
+syntax region markdoBlocked start=/- \[B\]/ end=/$/ contains=markdoReference,markdoTime
+
+highlight default link markdoReference Keyword
+highlight default link markdoTime Number
+highlight default link markdoDone Comment
+highlight default link markdoNew String
+highlight default link markdoBlocked Exception
+
 nnoremap <buffer> <silent> o :call <SID>new()<CR>
 nnoremap <buffer> <silent> <CR> :call <SID>toggle()<CR>
 nnoremap <buffer> <silent> <Leader>x :call <SID>toggle()<CR>
