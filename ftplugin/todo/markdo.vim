@@ -68,16 +68,16 @@ function! s:week()
 
   call append(line("$"), [
     \"## " . l:week_start . " - " . l:week_end,
-    \"**Monday**", ""
+    \"### Monday", ""
   \])
 
   let l:monday = line("$") - 1
 
   call append(line("$"), [
-    \"**Tuesday**", "",
-    \"**Wednesday**", "",
-    \"**Thursday**", "",
-    \"**Friday**", ""
+    \"### Tuesday", "",
+    \"### Wednesday", "",
+    \"### Thursday", "",
+    \"### Friday", ""
   \])
 
   echo "monday at " . l:monday
@@ -121,9 +121,9 @@ highlight default link todoExtra Special
 
 nnoremap <buffer> <silent> o :call <SID>new()<CR>
 nnoremap <buffer> <silent> <CR> :call <SID>toggle()<CR>
+nnoremap <buffer> <silent> - :call <SID>toggle("-")<CR>
 nnoremap <buffer> <silent> <Leader>x :call <SID>toggle()<CR>
 nnoremap <buffer> <silent> <Leader>n :call <SID>toggle("N")<CR>
 nnoremap <buffer> <silent> <Leader>b :call <SID>toggle("B")<CR>
-nnoremap <buffer> <silent> <Leader>- :call <SID>toggle("-")<CR>
 nnoremap <buffer> <silent> <Leader><CR> :call <SID>week()<CR>
 inoremap <buffer> <expr> <cr> <SID>i_return()
