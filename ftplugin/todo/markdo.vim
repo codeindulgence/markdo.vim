@@ -104,6 +104,7 @@ setlocal formatoptions=jtcqlnroaw
 
 syntax match todoRef /@[a-z]\+/
 syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
+syntax region todoStarted start=/- \[-\]/ end=/$/
 syntax region todoDone start=/- \[x\]/ end=/$/
 syntax region todoNew start=/- \[N\]/ end=/$/ contains=todoRef,todoTime
 syntax region todoBlocked start=/- \[B\]/ end=/$/ contains=todoRef,todoTime
@@ -111,6 +112,7 @@ syntax region todoExtra start=/^    |/ end=/$/ contains=todoRef,todoTime
 
 highlight default link todoRef Keyword
 highlight default link todoTime Number
+highlight default link todoStarted Tag
 highlight default link todoDone Comment
 highlight default link todoNew String
 highlight default link todoBlocked Exception
