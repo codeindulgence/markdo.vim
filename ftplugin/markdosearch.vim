@@ -30,10 +30,17 @@ highlight default link todoNew String
 highlight default link todoBlocked Exception
 highlight default link todoTag Function
 
-inoremap <buffer> <silent> <cr> <Esc>:call markdosearch#term()<CR>
+inoremap <buffer> <silent> <CR> <Esc>:call markdosearch#term()<CR>
 nnoremap <buffer> <silent> j :call <SID>next()<CR>
 nnoremap <buffer> <silent> k :call <SID>prev()<CR>
 nnoremap <buffer> <silent> / :call markdosearch#prompt()<CR>
+nnoremap <buffer> <CR> :call markdosearch#go()<CR>
+
+function! markdosearch#go()
+  normal 
+  call cursor(s:resultsmap[s:selected], 7)
+  normal zo
+endfunction
 
 function! markdosearch#prompt()
   let searchline = getline(1)
@@ -84,8 +91,14 @@ function! s:results(term)
   endif
 
   call deletebufline("markdosearch", 4, "$")
+
   let s:numresults = 0
+  let s:sourceline = 0
+  let s:resultsmap = {}
+
   for line in s:todolines
+    let s:sourceline += 1
+
     if line[:2] == "## "
       let dates = split(line[3:], ' - ')
       let from_d = split(dates[0])[0]
@@ -106,12 +119,16 @@ function! s:results(term)
       let entry = line[6:]
       if match(entry, a:term) > 0
         let s:numresults += 1
+        let s:resultsmap[s:numresults] = s:sourceline
+
         if date < from_d
           let full_date = date." ".to_m." ".to_y
         else
           let full_date = date." ".from_m." ".from_y
         endif
+
         let result = "  ".s:numresults.") ".full_date.": ".mark.entry
+
         call append(line("$"), result)
       endif
     endif
