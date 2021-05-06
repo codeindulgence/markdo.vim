@@ -124,17 +124,20 @@ setlocal formatoptions=jtcqlnroaw
 setlocal nonumber
 setlocal norelativenumber
 setlocal signcolumn=no
+setlocal iskeyword+=#
 
 syntax match todoRef /@[a-z]\+/
 syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
+syntax match todoTag /#[a-z-]\+/
 syntax region todoStarted start=/- \[-\]/ end=/$/
-syntax region todoDone start=/- \[x\]/ end=/$/ contains=todoRef,todoTime
-syntax region todoNew start=/- \[N\]/ end=/$/ contains=todoRef,todoTime
-syntax region todoBlocked start=/- \[B\]/ end=/$/ contains=todoRef,todoTime
-syntax region todoExtra start=/^    >/ end=/$/ contains=todoRef,todoTime
+syntax region todoDone start=/- \[x\]/ end=/$/ contains=todoRef,todoTime,todoTag
+syntax region todoNew start=/- \[N\]/ end=/$/ contains=todoRef,todoTime,todoTag
+syntax region todoBlocked start=/- \[B\]/ end=/$/ contains=todoRef,todoTime,todoTag
+syntax region todoExtra start=/^    >/ end=/$/ contains=todoRef,todoTime,todoTag
 
 highlight default link todoRef Keyword
 highlight default link todoTime Number
+highlight default link todoTag Function
 highlight default link todoStarted Tag
 highlight default link todoDone Comment
 highlight default link todoNew String
