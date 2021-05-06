@@ -92,7 +92,7 @@ function! markdo#week(...)
     endif
 
     if day == 'Fri'
-      call append(l:weektop, "## " . l:startdate . " ▸ " . l:date)
+      call append(l:weektop, "## " . l:startdate . " - " . l:date)
     endif
 
     call append(line("$"), ["**" . day . ", " . l:date[:1] . "**", ""])
