@@ -56,52 +56,10 @@ function! s:new()
 endfunction
 
 function! markdo#opensearch()
-  let s:todobufname = bufname()
-  let s:todolines = getbufline(bufnr(s:todobufname), 1, "$")
-
+  let todobufname = bufname()
   exe "edit markdosearch"
-  call setline(1, "Search: ")
-  startinsert!
-  call append(1, repeat('-', 80))
+  let b:markdosource = todobufname
 endfunction
-
-function! markdo#results(term)
-  call deletebufline("markdosearch", 3, "$")
-  for line in s:todolines
-    if line[:2] == "## "
-      let l:date = line[3:]
-    endif
-
-    if line[:1] == "**"
-      let l:day = line[2:4]
-    endif
-
-    if line[:2] == "- ["
-      let entry = line[2:]
-      if match(entry, a:term) > 0
-        call append(line("$"), date.", ".day.": ".entry)
-      endif
-    endif
-  endfor
-endfunction
-
-function! markdo#search()
-  let term = getline(1)[8:]
-  echom "Term: " . term
-  call markdo#results(term)
-  return ""
-endfunction
-
-function! s:setscratch()
-  setlocal buftype=nofile
-  " setlocal bufhidden=wipe
-  setlocal noswapfile
-  setlocal nobuflisted
-  setlocal filetype=markdown
-  inoremap <buffer> <silent> <cr> <Esc>:call markdo#search()<CR>A
-endfunction
-
-autocmd BufNewFile markdosearch call s:setscratch()
 
 function! markdo#week(...)
   let l:dowcmd = "date +%u" " Day Of Week
