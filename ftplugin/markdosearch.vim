@@ -34,29 +34,10 @@ inoremap <buffer> <silent> <CR> <Esc>:call markdosearch#term()<CR>
 nnoremap <buffer> <silent> j :call <SID>next()<CR>
 nnoremap <buffer> <silent> k :call <SID>prev()<CR>
 nnoremap <buffer> <silent> / :call markdosearch#prompt()<CR>
-nnoremap <buffer> <silent> <CR> :call markdosearch#show()<CR>
+nnoremap <buffer> <silent> <CR> :call markdosearch#go()<CR>
 nnoremap <buffer> q :q<CR>
 nnoremap <buffer> <Esc> :q<CR>
 nnoremap <buffer> <C-c> :q<CR>
-
-function! markdosearch#show()
-  if exists('s:showing') && s:selected == s:showing
-    unlet s:showing
-    wincmd k
-    match
-    wincmd j
-    quit
-    return
-  endif
-
-  let line = s:resultsmap[s:selected]
-  wincmd k
-  execute 'match Search /\%'.line.'l/'
-  call cursor(line, 7)
-  normal zo
-  wincmd j
-  let s:showing = s:selected
-endfunction
 
 function! markdosearch#prompt()
   let searchline = getline(2)
@@ -71,11 +52,29 @@ endfunction
 function! markdosearch#term()
   let term = getline(2)[8:]
   call s:results(term)
-  return ""
+endfunction
+
+function! markdosearch#go()
+  unlet s:showing
+  quit
+  match
+  call cursor(s:resultline, 7)
+  return
+endfunction
+
+function! s:show()
+  let s:resultline = s:resultsmap[s:selected]
+  let s:showing = s:selected
+  wincmd k
+  call cursor(s:resultline, 7)
+  execute 'match Search /\%'.s:resultline.'l/'
+  normal zo
+  wincmd j
 endfunction
 
 function! s:select(result)
   let s:selected = a:result
+  call s:show()
   for x in range(1, s:numresults)
     let lnum = x+4
     if x == a:result
@@ -163,5 +162,4 @@ if g:markdoterm == ''
   call markdosearch#prompt()
 else
   call s:results(g:markdoterm)
-  unlet g:markdoterm
 end
