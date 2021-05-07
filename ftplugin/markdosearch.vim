@@ -117,7 +117,7 @@ function! s:results(term)
     if line[:2] == "- ["
       let mark = line[2:5]
       let entry = line[6:]
-      if match(entry, a:term) > 0
+      if match(entry, a:term) >= 0
         let s:numresults += 1
         let s:resultsmap[s:numresults] = s:sourceline
 
