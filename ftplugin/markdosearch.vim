@@ -145,7 +145,7 @@ function! s:results(term)
       endif
     endif
   endfor
-  call append(line("$"), ["", "Results: " . s:numresults])
+  call append(line("$"), ["", "Results: ".s:numresults])
 
   if s:numresults > 0
     call s:select(1)

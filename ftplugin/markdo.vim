@@ -15,7 +15,7 @@ endfunction
 function! markdo#foldtext()
   let line = getline(v:foldstart)
   let line_text = substitute(line, '^## ', '', 'g')
-  return '> ' . line_text
+  return '> '.line_text
 endfunction
 
 function! s:toggle(...)
@@ -39,7 +39,7 @@ function! s:toggle(...)
       let mark = " "
     endif
 
-    let new_line = "- [" . mark . "] " . text
+    let new_line = "- [".mark."] ".text
     call setline(line_no, new_line)
   endif
 endfunction
@@ -100,7 +100,7 @@ function! markdo#week(...)
     if i == dow
       let offset += 1
     endif
-    let datecmd = "date --date='".day." ".offset." week' '" . fmt . "'"
+    let datecmd = "date --date='".day." ".offset." week' '".fmt."'"
     let date = trim(system(datecmd))
 
     if day == 'Mon'
@@ -109,10 +109,10 @@ function! markdo#week(...)
     endif
 
     if day == 'Fri'
-      call append(weektop, "## " . startdate . " - " . date)
+      call append(weektop, "## ".startdate." - ".date)
     endif
 
-    call append(line("$"), ["**" . day . ", " . date[:1] . "**", ""])
+    call append(line("$"), ["**".day.", ".date[:1]."**", ""])
   endfor
   call append(line("$"), repeat('-', 80))
 
