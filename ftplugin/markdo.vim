@@ -69,7 +69,7 @@ function! markdo#opensearch(...) range
   let todobufname = bufname()
   let g:markdoterm = term
   let g:markdosource = todobufname
-  exe "edit markdosearch"
+  exe "new markdosearch"
 endfunction
 
 function! markdo#week(...)

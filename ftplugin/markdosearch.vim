@@ -34,19 +34,32 @@ inoremap <buffer> <silent> <CR> <Esc>:call markdosearch#term()<CR>
 nnoremap <buffer> <silent> j :call <SID>next()<CR>
 nnoremap <buffer> <silent> k :call <SID>prev()<CR>
 nnoremap <buffer> <silent> / :call markdosearch#prompt()<CR>
-nnoremap <buffer> <CR> :call markdosearch#go()<CR>
+nnoremap <buffer> <silent> <CR> :call markdosearch#show()<CR>
 nnoremap <buffer> q :q<CR>
 nnoremap <buffer> <Esc> :q<CR>
 
-function! markdosearch#go()
-  normal 
-  call cursor(s:resultsmap[s:selected], 7)
+function! markdosearch#show()
+  if exists('s:showing') && s:selected == s:showing
+    unlet s:showing
+    wincmd k
+    match
+    wincmd j
+    quit
+    return
+  endif
+
+  let line = s:resultsmap[s:selected]
+  wincmd k
+  execute 'match Search /\%'.line.'l/'
+  call cursor(line, 7)
   normal zo
+  wincmd j
+  let s:showing = s:selected
 endfunction
 
 function! markdosearch#prompt()
-  let searchline = getline(1)
-  call cursor(1, 9)
+  let searchline = getline(2)
+  call cursor(2, 9)
   if searchline == "Search: "
     startinsert!
   else
@@ -55,7 +68,7 @@ function! markdosearch#prompt()
 endfunction
 
 function! markdosearch#term()
-  let term = getline(1)[8:]
+  let term = getline(2)[8:]
   call s:results(term)
   return ""
 endfunction
@@ -140,10 +153,12 @@ function! s:results(term)
   endif
 endfunction
 
-
 if g:markdoterm == ''
-  call setline(1, "Search: ")
-  call append(1, [repeat('-', 80), ""])
+  call append(0, [
+    \repeat('-', 80),
+    \"Search: ",
+    \repeat('-', 80),
+  \])
   call markdosearch#prompt()
 else
   call setline(1, "Search: ".g:markdoterm)
