@@ -99,9 +99,7 @@ function! s:prev()
 endfunction
 
 function! s:results(term)
-  if !exists('s:todolines')
-    let s:todolines = getbufline(bufnr(g:markdosource), 1, "$")
-  endif
+  let s:todolines = getbufline(bufnr(g:markdosource), 1, "$")
 
   call deletebufline("markdosearch", 4, "$")
 
