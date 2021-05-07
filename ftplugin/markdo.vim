@@ -1,11 +1,11 @@
 function! markdo#fold()
-  let l:cur_line = getline(v:lnum)
+  let cur_line = getline(v:lnum)
 
-  if l:cur_line =~ '^## '
+  if cur_line =~ '^## '
     return ">1"
   endif
 
-  if l:cur_line =~ '^-\+$'
+  if cur_line =~ '^-\+$'
     return "<1"
   endif
 
@@ -19,39 +19,39 @@ function! markdo#foldtext()
 endfunction
 
 function! s:toggle(...)
-  let l:line_no = line(".")
-  let l:cur_line = getline(line("."))
+  let line_no = line(".")
+  let cur_line = getline(line("."))
 
-  let l:pattern = "- \\[\\(.\\)\\] \\(.*\\)"
-  let l:matches = matchlist(l:cur_line, l:pattern)
+  let pattern = "- \\[\\(.\\)\\] \\(.*\\)"
+  let matches = matchlist(cur_line, pattern)
 
   if a:0 > 0
-    let l:mark = a:1
+    let mark = a:1
   else
-    let l:mark = "x"
+    let mark = "x"
   endif
 
-  if len(l:matches) > 0
-    let l:cur_mark = l:matches[1]
-    let l:text = l:matches[2]
+  if len(matches) > 0
+    let cur_mark = matches[1]
+    let text = matches[2]
 
-    if l:cur_mark == l:mark
-      let l:mark = " "
+    if cur_mark == mark
+      let mark = " "
     endif
 
-    let l:new_line = "- [" . l:mark . "] " . l:text
-    call setline(l:line_no, l:new_line)
+    let new_line = "- [" . mark . "] " . text
+    call setline(line_no, new_line)
   endif
 endfunction
 
 function! s:new()
-  let l:line_no = line(".")
-  call append(l:line_no, "")
-  if getline(l:line_no) != ""
-    call cursor(l:line_no + 1, 0)
-    let l:line_no = line(".")
+  let line_no = line(".")
+  call append(line_no, "")
+  if getline(line_no) != ""
+    call cursor(line_no + 1, 0)
+    let line_no = line(".")
   endif
-  call setline(l:line_no, "- [ ] ")
+  call setline(line_no, "- [ ] ")
   startinsert!
 endfunction
 
@@ -73,22 +73,22 @@ function! markdo#opensearch(...) range
 endfunction
 
 function! markdo#week(...)
-  let l:dowcmd = "date +%u" " Day Of Week
-  let l:dow = str2nr(trim(system(l:dowcmd)))
+  let dowcmd = "date +%u" " Day Of Week
+  let dow = str2nr(trim(system(dowcmd)))
 
   if a:0 > 0
-    let l:offset = str2nr(a:1)-1
+    let offset = str2nr(a:1)-1
   else " Get current week
-    if l:dow == 1
-      let l:offset = 0
+    if dow == 1
+      let offset = 0
     else
-      let l:offset = -1
+      let offset = -1
     endif
   endif
 
-  let l:fmt = "+%d %b %Y"
-  let l:end = line("$")
-  let l:days = [
+  let fmt = "+%d %b %Y"
+  let end = line("$")
+  let days = [
     \[1, 'Mon'],
     \[2, 'Tue'],
     \[3, 'Wed'],
@@ -96,36 +96,36 @@ function! markdo#week(...)
     \[5, 'Fri']
   \]
 
-  for [i, day] in l:days
-    if i == l:dow
-      let l:offset += 1
+  for [i, day] in days
+    if i == dow
+      let offset += 1
     endif
-    let l:datecmd = "date --date='".day." ".l:offset." week' '" . l:fmt . "'"
-    let l:date = trim(system(l:datecmd))
+    let datecmd = "date --date='".day." ".offset." week' '" . fmt . "'"
+    let date = trim(system(datecmd))
 
     if day == 'Mon'
-      let l:startdate = l:date
-      let l:weektop = line("$")
+      let startdate = date
+      let weektop = line("$")
     endif
 
     if day == 'Fri'
-      call append(l:weektop, "## " . l:startdate . " - " . l:date)
+      call append(weektop, "## " . startdate . " - " . date)
     endif
 
-    call append(line("$"), ["**" . day . ", " . l:date[:1] . "**", ""])
+    call append(line("$"), ["**" . day . ", " . date[:1] . "**", ""])
   endfor
   call append(line("$"), repeat('-', 80))
 
-  call cursor(l:weektop+1, 0)
+  call cursor(weektop+1, 0)
   normal zz
 endfunction
 
 function! s:entry()
-  let l:line = getline(".")
+  let line = getline(".")
 
-  if l:line[-1:] == ':'
+  if line[-1:] == ':'
     return "\n    > "
-  elseif l:line[:2] == '- ['
+  elseif line[:2] == '- ['
     return "\n- [ ] "
   else
     return "\n"
