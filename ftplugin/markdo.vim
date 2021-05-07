@@ -7,6 +7,8 @@ setlocal nonumber
 setlocal norelativenumber
 setlocal signcolumn=no
 setlocal iskeyword+=#,@-@
+setlocal fillchars=fold:\ 
+setlocal colorcolumn=0
 
 syntax match todoRef /@[a-z]\+/
 syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
@@ -25,6 +27,7 @@ highlight default link todoDone Comment
 highlight default link todoNew String
 highlight default link todoBlocked Exception
 highlight default link todoExtra Special
+highlight Folded ctermbg=NONE
 
 nnoremap <buffer> <silent> o :call <SID>new()<CR>
 nnoremap <buffer> <silent> <CR> :call <SID>toggle()<CR>
@@ -57,7 +60,7 @@ endfunction
 function! markdo#foldtext()
   let line = getline(v:foldstart)
   let line_text = substitute(line, '^## ', '', 'g')
-  return '> '.line_text
+  return '## '.line_text
 endfunction
 
 function! s:toggle(...)
