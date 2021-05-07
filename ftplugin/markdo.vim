@@ -141,7 +141,7 @@ setlocal formatoptions=jtcqlnroaw
 setlocal nonumber
 setlocal norelativenumber
 setlocal signcolumn=no
-setlocal iskeyword+=#
+setlocal iskeyword+=#,@-@
 
 syntax match todoRef /@[a-z]\+/
 syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
