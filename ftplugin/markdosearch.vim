@@ -77,7 +77,7 @@ endfunction
 function! s:select(result)
   let s:selected = a:result
   for x in range(1, s:numresults)
-    let lnum = x+3
+    let lnum = x+4
     if x == a:result
       let line = '>'.getline(lnum)[1:]
     else
@@ -100,9 +100,10 @@ function! s:prev()
 endfunction
 
 function! s:results(term)
+  call cursor(2, 8)
   let s:todolines = getbufline(bufnr(g:markdosource), 1, "$")
 
-  call deletebufline("markdosearch", 4, "$")
+  call deletebufline("markdosearch", 5, "$")
 
   let s:numresults = 0
   let s:sourceline = 0
@@ -152,16 +153,15 @@ function! s:results(term)
   endif
 endfunction
 
+call append(0, [
+  \repeat('-', 80),
+  \"Search: ".g:markdoterm,
+  \repeat('-', 80)
+\])
+
 if g:markdoterm == ''
-  call append(0, [
-    \repeat('-', 80),
-    \"Search: ",
-    \repeat('-', 80),
-  \])
   call markdosearch#prompt()
 else
-  call setline(1, "Search: ".g:markdoterm)
-  call append(1, [repeat('-', 80), ""])
   call s:results(g:markdoterm)
   unlet g:markdoterm
 end
