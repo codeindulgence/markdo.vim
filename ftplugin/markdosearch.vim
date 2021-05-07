@@ -35,6 +35,8 @@ nnoremap <buffer> <silent> j :call <SID>next()<CR>
 nnoremap <buffer> <silent> k :call <SID>prev()<CR>
 nnoremap <buffer> <silent> / :call markdosearch#prompt()<CR>
 nnoremap <buffer> <CR> :call markdosearch#go()<CR>
+nnoremap <buffer> q :q<CR>
+nnoremap <buffer> <Esc> :q<CR>
 
 function! markdosearch#go()
   normal 
