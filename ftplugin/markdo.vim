@@ -1,3 +1,45 @@
+setlocal foldmethod=expr
+setlocal foldexpr=markdo#fold()
+setlocal foldtext=markdo#foldtext()
+setlocal comments=:>
+setlocal formatoptions=jtcqlnroaw
+setlocal nonumber
+setlocal norelativenumber
+setlocal signcolumn=no
+setlocal iskeyword+=#,@-@
+
+syntax match todoRef /@[a-z]\+/
+syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
+syntax match todoTag /#[a-z-]\+/
+syntax region todoStarted start=/- \[-\]/ end=/$/
+syntax region todoDone start=/- \[x\]/ end=/$/ contains=todoRef,todoTime,todoTag
+syntax region todoNew start=/- \[N\]/ end=/$/ contains=todoRef,todoTime,todoTag
+syntax region todoBlocked start=/- \[B\]/ end=/$/ contains=todoRef,todoTime,todoTag
+syntax region todoExtra start=/^    >/ end=/$/ contains=todoRef,todoTime,todoTag
+
+highlight default link todoRef Keyword
+highlight default link todoTime Number
+highlight default link todoTag Function
+highlight default link todoStarted Tag
+highlight default link todoDone Comment
+highlight default link todoNew String
+highlight default link todoBlocked Exception
+highlight default link todoExtra Special
+
+nnoremap <buffer> <silent> o :call <SID>new()<CR>
+nnoremap <buffer> <silent> <CR> :call <SID>toggle()<CR>
+nnoremap <buffer> <silent> - :call <SID>toggle("-")<CR>
+nnoremap <buffer> <silent> <Leader>x :call <SID>toggle()<CR>
+nnoremap <buffer> <silent> <Leader>n :call <SID>toggle("N")<CR>
+nnoremap <buffer> <silent> <Leader>b :call <SID>toggle("B")<CR>
+nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
+nnoremap <buffer> <silent> g/ :MDSearch<CR>
+nnoremap <buffer> <silent> g<CR> :MDSearchTerm<CR>
+inoremap <buffer> <expr> <cr> <SID>entry()
+
+command! MDSearch :call markdo#opensearch()
+command! MDSearchTerm :call markdo#searchterm()
+
 function! markdo#fold()
   let cur_line = getline(v:lnum)
 
@@ -131,46 +173,3 @@ function! s:entry()
     return "\n"
   endif
 endfunction
-
-setlocal foldmethod=expr
-setlocal foldexpr=markdo#fold()
-setlocal foldtext=markdo#foldtext()
-
-setlocal comments=:>
-setlocal formatoptions=jtcqlnroaw
-setlocal nonumber
-setlocal norelativenumber
-setlocal signcolumn=no
-setlocal iskeyword+=#,@-@
-
-syntax match todoRef /@[a-z]\+/
-syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
-syntax match todoTag /#[a-z-]\+/
-syntax region todoStarted start=/- \[-\]/ end=/$/
-syntax region todoDone start=/- \[x\]/ end=/$/ contains=todoRef,todoTime,todoTag
-syntax region todoNew start=/- \[N\]/ end=/$/ contains=todoRef,todoTime,todoTag
-syntax region todoBlocked start=/- \[B\]/ end=/$/ contains=todoRef,todoTime,todoTag
-syntax region todoExtra start=/^    >/ end=/$/ contains=todoRef,todoTime,todoTag
-
-highlight default link todoRef Keyword
-highlight default link todoTime Number
-highlight default link todoTag Function
-highlight default link todoStarted Tag
-highlight default link todoDone Comment
-highlight default link todoNew String
-highlight default link todoBlocked Exception
-highlight default link todoExtra Special
-
-command! MDSearch :call markdo#opensearch()
-command! MDSearchTerm :call markdo#searchterm()
-
-nnoremap <buffer> <silent> o :call <SID>new()<CR>
-nnoremap <buffer> <silent> <CR> :call <SID>toggle()<CR>
-nnoremap <buffer> <silent> - :call <SID>toggle("-")<CR>
-nnoremap <buffer> <silent> <Leader>x :call <SID>toggle()<CR>
-nnoremap <buffer> <silent> <Leader>n :call <SID>toggle("N")<CR>
-nnoremap <buffer> <silent> <Leader>b :call <SID>toggle("B")<CR>
-nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
-nnoremap <buffer> <silent> g/ :MDSearch<CR>
-nnoremap <buffer> <silent> g<CR> :MDSearchTerm<CR>
-inoremap <buffer> <expr> <cr> <SID>entry()
