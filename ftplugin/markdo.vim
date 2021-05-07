@@ -55,10 +55,21 @@ function! s:new()
   startinsert!
 endfunction
 
-function! markdo#opensearch()
+function! markdo#searchterm()
+  let term = expand('<cword>')
+  call markdo#opensearch(term)
+endfunction
+
+function! markdo#opensearch(...) range
+  let term = ''
+  if a:0 > 0
+    let term = a:1
+  endif
+
   let todobufname = bufname()
+  let g:markdoterm = term
+  let g:markdosource = todobufname
   exe "edit markdosearch"
-  let b:markdosource = todobufname
 endfunction
 
 function! markdo#week(...)
@@ -150,6 +161,9 @@ highlight default link todoNew String
 highlight default link todoBlocked Exception
 highlight default link todoExtra Special
 
+command! MDSearch :call markdo#opensearch()
+command! MDSearchTerm :call markdo#searchterm()
+
 nnoremap <buffer> <silent> o :call <SID>new()<CR>
 nnoremap <buffer> <silent> <CR> :call <SID>toggle()<CR>
 nnoremap <buffer> <silent> - :call <SID>toggle("-")<CR>
@@ -157,4 +171,6 @@ nnoremap <buffer> <silent> <Leader>x :call <SID>toggle()<CR>
 nnoremap <buffer> <silent> <Leader>n :call <SID>toggle("N")<CR>
 nnoremap <buffer> <silent> <Leader>b :call <SID>toggle("B")<CR>
 nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
+nnoremap <buffer> <silent> g/ :MDSearch<CR>
+nnoremap <buffer> <silent> g<CR> :MDSearchTerm<CR>
 inoremap <buffer> <expr> <cr> <SID>entry()

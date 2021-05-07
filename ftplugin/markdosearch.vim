@@ -44,7 +44,6 @@ endfunction
 
 function! markdosearch#prompt()
   let searchline = getline(1)
-  echom "Line: " . searchline
   call cursor(1, 9)
   if searchline == "Search: "
     startinsert!
@@ -55,7 +54,6 @@ endfunction
 
 function! markdosearch#term()
   let term = getline(1)[8:]
-  echom "Term: " . term
   call s:results(term)
   return ""
 endfunction
@@ -87,7 +85,7 @@ endfunction
 
 function! s:results(term)
   if !exists('s:todolines')
-    let s:todolines = getbufline(bufnr(b:markdosource), 1, "$")
+    let s:todolines = getbufline(bufnr(g:markdosource), 1, "$")
   endif
 
   call deletebufline("markdosearch", 4, "$")
@@ -140,6 +138,14 @@ function! s:results(term)
   endif
 endfunction
 
-call setline(1, "Search: ")
-call append(1, [repeat('-', 80), ""])
-call markdosearch#prompt()
+
+if g:markdoterm == ''
+  call setline(1, "Search: ")
+  call append(1, [repeat('-', 80), ""])
+  call markdosearch#prompt()
+else
+  call setline(1, "Search: ".g:markdoterm)
+  call append(1, [repeat('-', 80), ""])
+  call s:results(g:markdoterm)
+  unlet g:markdoterm
+end
