@@ -37,6 +37,7 @@ nnoremap <buffer> <silent> / :call markdosearch#prompt()<CR>
 nnoremap <buffer> <silent> <CR> :call markdosearch#show()<CR>
 nnoremap <buffer> q :q<CR>
 nnoremap <buffer> <Esc> :q<CR>
+nnoremap <buffer> <C-c> :q<CR>
 
 function! markdosearch#show()
   if exists('s:showing') && s:selected == s:showing
