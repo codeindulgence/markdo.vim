@@ -159,7 +159,7 @@ function! markdo#week(...)
 
     call append(line("$"), ["**".day.", ".date[:1]."**", ""])
   endfor
-  call append(line("$"), repeat('-', 80))
+  call append(line("$"), repeat('-', &columns))
 
   call cursor(weektop+1, 0)
   normal zz

@@ -153,9 +153,9 @@ function! s:results(term)
 endfunction
 
 call append(0, [
-  \repeat('-', 80),
+  \repeat('-', &columns),
   \"Search: ".g:markdoterm,
-  \repeat('-', 80)
+  \repeat('-', &columns)
 \])
 
 if g:markdoterm == ''
