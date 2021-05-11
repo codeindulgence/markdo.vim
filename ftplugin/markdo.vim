@@ -41,6 +41,8 @@ nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
 nnoremap <buffer> <silent> g/ :MDSearch<CR>
 nnoremap <buffer> <silent> g<Tab> :MDSearchLine<CR>
 nnoremap <buffer> <silent> g<CR> :MDSearchWord<CR>
+nnoremap <buffer> <silent> K ddkP
+nnoremap <buffer> <silent> J ddp
 inoremap <buffer> <expr> <cr> <SID>entry()
 
 command! MDSearch :call markdo#opensearch()
