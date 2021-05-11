@@ -79,12 +79,18 @@ function! s:select(result)
   for x in range(1, s:numresults)
     let lnum = x+6
     if x == a:result
-      let line = '>'.getline(lnum)[1:]
+      call setline(lnum, '>'.getline(lnum)[1:])
     else
-      let line = ' '.getline(lnum)[1:]
+      call setline(lnum, ' '.getline(lnum)[1:])
     endif
-    call setline(lnum, line)
   endfor
+  echo a:result+6."/".winheight(".")
+  if a:result+9 > getpos(".")[1]+winheight(".")
+    normal 
+  endif
+  if a:result+7 < getpos(".")[1]
+    normal 
+  endif
 endfunction
 
 function! s:next()
@@ -100,7 +106,7 @@ function! s:prev()
 endfunction
 
 function! s:results(term)
-  call cursor(2, 8)
+  call cursor(2, 1)
   let s:todolines = getbufline(bufnr(g:markdosource), 1, "$")
 
   call deletebufline("markdosearch", 5, "$")
