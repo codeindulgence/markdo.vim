@@ -77,7 +77,7 @@ function! s:select(result)
   let s:selected = a:result
   call s:show()
   for x in range(1, s:numresults)
-    let lnum = x+4
+    let lnum = x+6
     if x == a:result
       let line = '>'.getline(lnum)[1:]
     else
@@ -146,7 +146,7 @@ function! s:results(term)
       endif
     endif
   endfor
-  call append(line("$"), ["", "Results: ".s:numresults])
+  call append(3, ["", "Results: ".s:numresults])
 
   if s:numresults > 0
     call s:select(1)
