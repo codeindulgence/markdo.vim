@@ -9,7 +9,7 @@ setlocal signcolumn=no
 setlocal nospell
 setlocal colorcolumn=0
 
-syntax match todoResIdx /\d)/
+syntax match todoResIdx /\d\+)/
 syntax match todoSelect /^>/
 syntax match todoRef /@[a-z]\+/
 syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
