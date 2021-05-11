@@ -139,6 +139,16 @@ function! s:results(term)
       let matches = []
 
       for term in terms
+        if len(term) == 2 && term[0] == "="
+          let markterm = term[1]
+          if mark[1] == markterm
+            call add(matches, v:true)
+          else
+            call add(matches, v:false)
+          endif
+          continue
+        endif
+
         if match(entry, term) >= 0
           call add(matches, v:true)
         else
