@@ -39,11 +39,13 @@ nnoremap <buffer> <silent> <Leader>n :call <SID>toggle("N")<CR>
 nnoremap <buffer> <silent> <Leader>b :call <SID>toggle("B")<CR>
 nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
 nnoremap <buffer> <silent> g/ :MDSearch<CR>
-nnoremap <buffer> <silent> g<CR> :MDSearchTerm<CR>
+nnoremap <buffer> <silent> g<Tab> :MDSearchLine<CR>
+nnoremap <buffer> <silent> g<CR> :MDSearchWord<CR>
 inoremap <buffer> <expr> <cr> <SID>entry()
 
 command! MDSearch :call markdo#opensearch()
-command! MDSearchTerm :call markdo#searchterm()
+command! MDSearchWord :call markdo#searchterm('word')
+command! MDSearchLine :call markdo#searchterm('line')
 
 function! markdo#fold()
   let cur_line = getline(v:lnum)
@@ -102,8 +104,12 @@ function! s:new()
   startinsert!
 endfunction
 
-function! markdo#searchterm()
-  let term = expand('<cword>')
+function! markdo#searchterm(expr)
+  if a:expr == 'word'
+    let term = expand('<cword>')
+  elseif a:expr == 'line'
+    let term = '^'.split(getline(line('.')), '\[.\] ')[1].'$'
+  endif
   call markdo#opensearch(term)
 endfunction
 
