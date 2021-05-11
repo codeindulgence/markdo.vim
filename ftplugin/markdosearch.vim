@@ -76,7 +76,7 @@ endfunction
 function! s:select(result)
   let s:selected = a:result
   call s:show()
-  for x in range(1, s:numresults)
+  for x in range(1, s:count)
     let lnum = x+6
     if x == a:result
       call setline(lnum, '>'.getline(lnum)[1:])
@@ -94,7 +94,7 @@ function! s:select(result)
 endfunction
 
 function! s:next()
-  if s:selected < s:numresults
+  if s:selected < s:count
     call s:select(s:selected+1)
   endif
 endfunction
@@ -111,7 +111,7 @@ function! s:results(term)
 
   call deletebufline("markdosearch", 5, "$")
 
-  let s:numresults = 0
+  let s:count = 0
   let s:sourceline = 0
   let s:resultsmap = {}
 
@@ -137,8 +137,8 @@ function! s:results(term)
       let mark = line[2:5]
       let entry = line[6:]
       if match(entry, a:term) >= 0
-        let s:numresults += 1
-        let s:resultsmap[s:numresults] = s:sourceline
+        let s:count += 1
+        let s:resultsmap[s:count] = s:sourceline
 
         if date < from_d
           let full_date = date." ".to_m." ".to_y
@@ -146,15 +146,15 @@ function! s:results(term)
           let full_date = date." ".from_m." ".from_y
         endif
 
-        let result = "  ".s:numresults.") ".full_date.": ".mark.entry
+        let result = printf("  %02d) %s: %s", s:count, full_date, mark.entry)
 
         call append(line("$"), result)
       endif
     endif
   endfor
-  call append(3, ["", "Results: ".s:numresults])
+  call append(3, ["", "Results: ".s:count])
 
-  if s:numresults > 0
+  if s:count > 0
     call s:select(1)
   endif
 endfunction
