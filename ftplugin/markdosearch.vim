@@ -84,7 +84,6 @@ function! s:select(result)
       call setline(lnum, ' '.getline(lnum)[1:])
     endif
   endfor
-  echo a:result+6."/".winheight(".")
   if a:result+9 > getpos(".")[1]+winheight(".")
     normal 
   endif
@@ -114,6 +113,7 @@ function! s:results(term)
   let s:count = 0
   let s:sourceline = 0
   let s:resultsmap = {}
+  let terms = split(a:term)
 
   for line in s:todolines
     let s:sourceline += 1
@@ -136,7 +136,17 @@ function! s:results(term)
     if line[:2] == "- ["
       let mark = line[2:5]
       let entry = line[6:]
-      if match(entry, a:term) >= 0
+      let matches = []
+
+      for term in terms
+        if match(entry, term) >= 0
+          call add(matches, v:true)
+        else
+          call add(matches, v:false)
+        endif
+      endfor
+
+      if uniq(sort(matches)) == [v:true]
         let s:count += 1
         let s:resultsmap[s:count] = s:sourceline
 
