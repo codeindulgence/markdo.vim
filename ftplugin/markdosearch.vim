@@ -7,6 +7,7 @@ setlocal nonumber
 setlocal norelativenumber
 setlocal signcolumn=no
 setlocal nospell
+setlocal colorcolumn=0
 
 syntax match todoResIdx /\d)/
 syntax match todoSelect /^>/
