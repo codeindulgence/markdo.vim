@@ -10,7 +10,7 @@ setlocal iskeyword+=#,@-@
 setlocal fillchars=fold:\ 
 setlocal colorcolumn=0
 
-syntax match todoRef /@[a-z.]\+/
+syntax match todoRef /\s@[a-z.]\+/
 syntax match todoTime /\d\d:\d\d-\d\d:\d\d/
 syntax match todoDate /\d\d\d\d-\d\d-\d\d/
 syntax match todoTag /#[a-z-]\+/
