@@ -198,9 +198,9 @@ function! s:results(term)
         endif
 
         if match(entry, term) >= 0
-          call add(matches, v:true)
+          call add(matches, 1)
         else
-          call add(matches, v:false)
+          call add(matches, 0)
         endif
       endfor
 
