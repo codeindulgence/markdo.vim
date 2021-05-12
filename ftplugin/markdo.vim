@@ -41,6 +41,7 @@ nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
 nnoremap <buffer> <silent> g/ :MDSearch<CR>
 nnoremap <buffer> <silent> g<Tab> :MDSearchLine<CR>
 nnoremap <buffer> <silent> g<CR> :MDSearchWord<CR>
+nnoremap <buffer> <silent> g! :MDIncomplete<CR>
 nnoremap <buffer> <silent> K ddkP
 nnoremap <buffer> <silent> J ddp
 inoremap <buffer> <expr> <cr> <SID>entry()
@@ -48,6 +49,7 @@ inoremap <buffer> <expr> <cr> <SID>entry()
 command! MDSearch :call markdo#opensearch()
 command! MDSearchWord :call markdo#searchterm('word')
 command! MDSearchLine :call markdo#searchterm('line')
+command! MDIncomplete :call markdo#searchterm('!')
 
 function! markdo#fold()
   let cur_line = getline(v:lnum)
@@ -111,11 +113,13 @@ function! markdo#searchterm(expr)
     let term = expand('<cword>')
   elseif a:expr == 'line'
     let term = '^'.split(getline(line('.')), '\[.\] ')[1].'$'
+  else
+    let term = a:expr
   endif
   call markdo#opensearch(term)
 endfunction
 
-function! markdo#opensearch(...) range
+function! markdo#opensearch(...)
   let term = ''
   if a:0 > 0
     let term = a:1

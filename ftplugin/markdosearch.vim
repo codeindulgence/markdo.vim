@@ -45,6 +45,9 @@ function! markdosearch#prompt()
   call cursor(2, 9)
   if searchline == "Search: "
     startinsert!
+  elseif searchline == "Incomplete Tasks"
+    call setline(2, 'Search: ')
+    startinsert!
   else
     normal v$
   endif
@@ -104,11 +107,54 @@ function! s:prev()
   endif
 endfunction
 
+function! s:incomplete(lines)
+  let sourceline = 0
+  let entries = {}
+
+  call setline(2, "Incomplete Tasks")
+
+  for line in a:lines
+    let sourceline += 1
+    if line[:2] == '- ['
+      let entry = line[6:]
+      let mark = line[3]
+      if mark == 'x'
+        if has_key(entries, entry)
+          unlet entries[entry]
+        endif
+      else
+        let entries[entry] = [mark, sourceline]
+      endif
+    endif
+  endfor
+
+  let s:count = 0
+  let s:resultsmap = {}
+  for entry in keys(entries)
+    let s:count += 1
+    let [_, sourceline] = entries[entry]
+    let s:resultsmap[s:count] = sourceline
+    let result = printf("  %02d) %s", s:count, entry)
+
+    call append(line("$"), result)
+  endfor
+
+  call append(3, ["", "Results: ".s:count])
+
+  if s:count > 0
+    call s:select(1)
+  endif
+endfunction
+
 function! s:results(term)
   call cursor(2, 1)
   let s:todolines = getbufline(bufnr(g:markdosource), 1, "$")
 
   call deletebufline("markdosearch", 5, "$")
+
+  if a:term == '!'
+    return s:incomplete(s:todolines)
+  endif
 
   let s:count = 0
   let s:sourceline = 0
