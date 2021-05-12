@@ -185,12 +185,14 @@ function! s:results(term)
       let matches = []
 
       for term in terms
-        if len(term) == 2 && term[0] == "="
+        if len(term) == 2 && (term[0] == '=' || term[0] == '!')
           let markterm = term[1]
+          let want = term[0] == '='
+
           if mark[1] == markterm
-            call add(matches, v:true)
+            call add(matches, want)
           else
-            call add(matches, v:false)
+            call add(matches, !want)
           endif
           continue
         endif
@@ -202,7 +204,7 @@ function! s:results(term)
         endif
       endfor
 
-      if uniq(sort(matches)) == [v:true]
+      if uniq(sort(matches)) == [1]
         let s:count += 1
         let s:resultsmap[s:count] = s:sourceline
 
