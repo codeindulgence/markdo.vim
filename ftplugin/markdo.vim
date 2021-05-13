@@ -43,6 +43,8 @@ nnoremap <buffer> <silent> g<Tab> :MDSearchLine<CR>
 nnoremap <buffer> <silent> g<CR> :MDSearchWord<CR>
 nnoremap <buffer> <silent> g! :MDIncomplete<CR>
 nnoremap <buffer> <silent> gt :MDJump today<CR>
+nnoremap <buffer> <silent> gc :MDCopy today<CR>
+nnoremap <buffer> <silent> gm :MDMove today<CR>
 nnoremap <buffer> <silent> K ddkP
 nnoremap <buffer> <silent> J ddp
 inoremap <buffer> <expr> <cr> <SID>entry()
@@ -53,6 +55,8 @@ command! MDSearch call markdo#opensearch()
 command! MDSearchWord call markdo#searchterm('word')
 command! MDSearchLine call markdo#searchterm('line')
 command! MDIncomplete call markdo#searchterm('!')
+command! -nargs=1 MDCopy call markdo#copy(<f-args>)
+command! -nargs=1 MDMove call markdo#move(<f-args>)
 
 function! markdo#fold()
   let cur_line = getline(v:lnum)
@@ -120,6 +124,18 @@ function! markdo#jump(date)
   normal n
   let @/ = day
   normal n
+endfunction
+
+function! markdo#move(date)
+  normal dd
+  call markdo#jump(a:date)
+  normal p
+endfunction
+
+function! markdo#copy(date)
+  normal yy
+  call markdo#jump(a:date)
+  normal p
 endfunction
 
 function! markdo#searchterm(expr)
