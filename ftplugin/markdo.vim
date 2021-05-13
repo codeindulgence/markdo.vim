@@ -37,7 +37,7 @@ nnoremap <buffer> <silent> - :call <SID>toggle("-")<CR>
 nnoremap <buffer> <silent> <Leader>x :call <SID>toggle()<CR>
 nnoremap <buffer> <silent> <Leader>n :call <SID>toggle("N")<CR>
 nnoremap <buffer> <silent> <Leader>b :call <SID>toggle("B")<CR>
-nnoremap <buffer> <silent> <Leader><CR> :call markdo#week()<CR>
+nnoremap <buffer> <silent> <Leader><CR> :MDWeek<CR>
 nnoremap <buffer> <silent> g/ :MDSearch<CR>
 nnoremap <buffer> <silent> g<Tab> :MDSearchLine<CR>
 nnoremap <buffer> <silent> g<CR> :MDSearchWord<CR>
@@ -48,6 +48,7 @@ nnoremap <buffer> <silent> J ddp
 inoremap <buffer> <expr> <cr> <SID>entry()
 
 command! -nargs=1 MDJump call markdo#jump(<f-args>)
+command! MDWeek call markdo#week()
 command! MDSearch call markdo#opensearch()
 command! MDSearchWord call markdo#searchterm('word')
 command! MDSearchLine call markdo#searchterm('line')
