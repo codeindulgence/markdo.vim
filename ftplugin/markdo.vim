@@ -42,10 +42,12 @@ nnoremap <buffer> <silent> g/ :MDSearch<CR>
 nnoremap <buffer> <silent> g<Tab> :MDSearchLine<CR>
 nnoremap <buffer> <silent> g<CR> :MDSearchWord<CR>
 nnoremap <buffer> <silent> g! :MDIncomplete<CR>
+nnoremap <buffer> <silent> gt :MDToday<CR>
 nnoremap <buffer> <silent> K ddkP
 nnoremap <buffer> <silent> J ddp
 inoremap <buffer> <expr> <cr> <SID>entry()
 
+command! MDToday :call markdo#jump('today')
 command! MDSearch :call markdo#opensearch()
 command! MDSearchWord :call markdo#searchterm('word')
 command! MDSearchLine :call markdo#searchterm('line')
@@ -106,6 +108,17 @@ function! s:new()
   endif
   call setline(line_no, "- [ ] ")
   startinsert!
+endfunction
+
+function! markdo#jump(date)
+  let fmt = "+%b/%a, %d"
+  let datecmd = "date --date='".a:date."' '".fmt."'"
+  let [mon, day] = split(trim(system(datecmd)), '/')
+  normal gg
+  let @/ = mon
+  normal n
+  let @/ = day
+  normal n
 endfunction
 
 function! markdo#searchterm(expr)
