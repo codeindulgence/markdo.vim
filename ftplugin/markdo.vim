@@ -42,16 +42,16 @@ nnoremap <buffer> <silent> g/ :MDSearch<CR>
 nnoremap <buffer> <silent> g<Tab> :MDSearchLine<CR>
 nnoremap <buffer> <silent> g<CR> :MDSearchWord<CR>
 nnoremap <buffer> <silent> g! :MDIncomplete<CR>
-nnoremap <buffer> <silent> gt :MDToday<CR>
+nnoremap <buffer> <silent> gt :MDJump today<CR>
 nnoremap <buffer> <silent> K ddkP
 nnoremap <buffer> <silent> J ddp
 inoremap <buffer> <expr> <cr> <SID>entry()
 
-command! MDToday :call markdo#jump('today')
-command! MDSearch :call markdo#opensearch()
-command! MDSearchWord :call markdo#searchterm('word')
-command! MDSearchLine :call markdo#searchterm('line')
-command! MDIncomplete :call markdo#searchterm('!')
+command! -nargs=1 MDJump call markdo#jump(<f-args>)
+command! MDSearch call markdo#opensearch()
+command! MDSearchWord call markdo#searchterm('word')
+command! MDSearchLine call markdo#searchterm('line')
+command! MDIncomplete call markdo#searchterm('!')
 
 function! markdo#fold()
   let cur_line = getline(v:lnum)
